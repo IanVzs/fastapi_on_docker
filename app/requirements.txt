@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+aiohttp
+xmltodict
+sqlalchemy
+apscheduler
+loguru
+aiomysql
