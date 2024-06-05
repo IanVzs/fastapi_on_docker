@@ -1,5 +1,5 @@
 """
-MYSQL_USER=root MYSQL_PASSWD=nova#2021 MYSQL_HOST=localhost MYSQL_PORT=3316 MYSQL_DB=crud MYSQL_TABLE="crud_current" python app/scripts/sql_tools.py 
+MYSQL_USER=root MYSQL_PASSWD=passwd MYSQL_HOST=localhost MYSQL_PORT=3316 MYSQL_DB=crud MYSQL_TABLE="crud_current" python app/scripts/sql_tools.py 
 """
 import os
 from loguru import logger
