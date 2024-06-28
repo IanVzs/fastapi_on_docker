@@ -2,11 +2,13 @@
 USER=root PASSWD=passwd SHOST=localhost THOST=localhost SPORT=3306 TPORT=3316 DB=curd TABLE=crud_current python app/scripts/sql_one2one.py 
 """
 import os
+import re
 import time
 from tqdm import tqdm
 from loguru import logger
 
 from sqlalchemy import create_engine, MetaData, Table, select
+from sqlalchemy.exc import IntegrityError, OperationalError
 
 # 定义数据库连接字符串
 USER = os.environ['USER']
@@ -54,13 +56,31 @@ with source_engine.connect() as source_conn, target_engine.connect() as target_c
     if LIMIT is None:
         source_query = source_table.select()
     else:
-        source_query = source_table.select().limit(LIMIT).offset(OFFSET)
+        if 1:
+            source_query = source_table.select().where(source_table.c.install_at > "2024-06-12 00:00:00", source_table.c.offer_id == 18723).limit(LIMIT).offset(OFFSET)
+        else:
+            source_query = source_table.select().where().limit(LIMIT).offset(OFFSET)
+        logger.info(f"sql: {source_query}")
     result = source_conn.execute(source_query)
     
     # 逐行插入到目标数据库
     for row in tqdm(result):
         try:
             target_conn.execute(target_table.insert().values(row))
-        except Exception as err:
+        except IntegrityError as err:
+            if re.search('Duplicate entry.*key.*PRIMARY', str(err)):
+                pass
+            else:
+                logger.info(f"插入错误|{err}, {row[0]}")
+        except OperationalError as err:
+            _continue = False
+            for i in row:
+                if i == "0000-00-00 00:00:00":
+                    logger.warning(f"数据错误|{err}, {row[0]}")
+                    _continue = True
+                    break
+            if _continue:
+                continue
             logger.info(f"插入错误|{err}, {row[0]}")
+
     target_conn.commit()
