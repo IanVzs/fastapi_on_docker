@@ -136,3 +136,7 @@ config.py
 
 # vscode editor
 .vscode
+
+# tar
+*.tar
+*.gz
