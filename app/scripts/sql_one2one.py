@@ -1,5 +1,5 @@
 """
-USER=root PASSWD=passwd SHOST=localhost THOST=localhost SPORT=3306 TPORT=3316 DB=curd TABLE=crud_current python app/scripts/sql_one2one.py 
+USER=root SPASSWD=passwd TPASSWD=passwd SHOST=localhost THOST=localhost SPORT=3306 TPORT=3316 DB=curd TABLE=crud_current python app/scripts/sql_one2one.py 
 """
 import os
 import re
@@ -12,7 +12,8 @@ from sqlalchemy.exc import IntegrityError, OperationalError
 
 # 定义数据库连接字符串
 USER = os.environ['USER']
-PASSWD = os.environ['PASSWD']
+SPASSWD = os.environ['SPASSWD']
+TPASSWD = os.environ['TPASSWD']
 source_host = os.environ["SHOST"]
 target_host = os.environ["THOST"]
 SPORT = os.environ['SPORT']
@@ -22,8 +23,8 @@ TABLE = os.environ['TABLE']
 LIMIT = os.environ.get('LIMIT', None)
 OFFSET = os.environ.get('OFFSET')
 
-source_connection_string = f"mysql+pymysql://{USER}:{PASSWD}@{source_host}:{SPORT}/{DB}"
-target_connection_string = f"mysql+pymysql://{USER}:{PASSWD}@{target_host}:{TPORT}/{DB}"
+source_connection_string = f"mysql+pymysql://{USER}:{SPASSWD}@{source_host}:{SPORT}/{DB}"
+target_connection_string = f"mysql+pymysql://{USER}:{TPASSWD}@{target_host}:{TPORT}/{DB}"
 
 
 
