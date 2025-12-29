@@ -58,7 +58,7 @@ with source_engine.connect() as source_conn, target_engine.connect() as target_c
         source_query = source_table.select()
     else:
         if 1:
-            source_query = source_table.select().where(source_table.c.install_at > "2024-06-12 00:00:00", source_table.c.offer_id == 18723).limit(LIMIT).offset(OFFSET)
+            source_query = source_table.select().where(source_table.c.created > "2024-08-01").limit(LIMIT).offset(OFFSET)
         else:
             source_query = source_table.select().where().limit(LIMIT).offset(OFFSET)
         logger.info(f"sql: {source_query}")
